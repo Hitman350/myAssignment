@@ -100,8 +100,6 @@ public class OneAway extends JFrame {
     private boolean isOneAway(String str1, String str2) {
         int len1 = str1.length();
         int len2 = str2.length();
-
-        // If the difference in lengths is greater than 1, they're not one edit away
         if (Math.abs(len1 - len2) > 1) {
             return false;
         }

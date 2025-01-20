@@ -122,6 +122,7 @@ public class LongestCommonSubstring extends JFrame {
         inputTextArea2.setText("");
         outputTextArea.setText("");
         timeLabel.setText("Time taken: ");
+        inputTextArea1.requestFocus();
     }
 
     public static void main(String[] args) {
