@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": ["src"],
+    "java.project.outputPath": "bin",
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar",
+        "c:\\Users\\HP\\Downloads\\jcalendar-1.4\\lib\\jcalendar-1.4.jar"
+    ],
+    "java.debug.settings.onBuildFailureProceed": true
+}
