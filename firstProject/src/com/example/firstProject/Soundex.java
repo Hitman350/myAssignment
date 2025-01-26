@@ -74,7 +74,7 @@ public class Soundex extends JFrame {
         long startTime = System.nanoTime();
         String soundexCode = computeSoundex(name);
         long endTime = System.nanoTime();
-        timeLabel.setText("Computation Time: " + (endTime - startTime) / 1_000_000.0 + " ms");
+        timeLabel.setText("Computation Time: " + (endTime - startTime) / 1000000.0 + " ms");
         outputTextArea.setForeground(Color.BLACK);
         outputTextArea.setText(soundexCode);
     }

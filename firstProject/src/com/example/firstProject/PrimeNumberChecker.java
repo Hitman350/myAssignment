@@ -14,7 +14,7 @@ public class PrimeNumberChecker extends JFrame implements ActionListener {
 
     public PrimeNumberChecker() {
         setTitle("Prime Number Checker");
-        setSize(400, 300); // Increased the size to accommodate the result area
+        setSize(400, 300); 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new GridBagLayout());

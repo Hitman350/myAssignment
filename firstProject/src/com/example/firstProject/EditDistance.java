@@ -8,15 +8,15 @@ public class EditDistance extends JFrame {
     private JLabel timeLabel;
 
     public EditDistance() {
-        setTitle("Edit Distance Calculator");
+        setTitle("Edit Distance");
         setSize(800, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
         setLayout(new BorderLayout(10, 10));
 
         Font textFont = new Font("Arial", Font.PLAIN, 16);
 
-        // Input Panel
         JPanel inputPanel = new JPanel(new GridLayout(2, 1, 10, 10));
         inputPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -43,7 +43,6 @@ public class EditDistance extends JFrame {
 
         add(inputPanel, BorderLayout.NORTH);
 
-        // Output Panel
         JPanel outputPanel = new JPanel(new BorderLayout());
         outputPanel.setBorder(BorderFactory.createTitledBorder("Result"));
 
@@ -57,7 +56,6 @@ public class EditDistance extends JFrame {
 
         add(outputPanel, BorderLayout.CENTER);
 
-        // Bottom Panel
         JPanel bottomPanel = new JPanel(new BorderLayout());
 
         JPanel buttonPanel = new JPanel();
@@ -74,7 +72,6 @@ public class EditDistance extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Button Actions
         calculateButton.addActionListener(e -> calculateEditDistance());
         clearButton.addActionListener(e -> clearFields());
 
@@ -92,70 +89,54 @@ public class EditDistance extends JFrame {
 
         long startTime = System.nanoTime();
 
-        int[][] dp = computeEditDistance(word1, word2);
-        String steps = reconstructSteps(word1, word2, dp);
+        StringBuilder steps = new StringBuilder();
+        int editDistance = computeEditDistanceWithLogic(word1, word2, steps);
 
         long endTime = System.nanoTime();
-        timeLabel.setText("Time taken: " + (endTime - startTime) / 1_000_000.0 + " ms");
+        timeLabel.setText("Time taken: " + (endTime - startTime) / 1000000.0 + " ms");
 
-        int editDistance = dp[word1.length()][word2.length()];
-        outputTextArea.setText("Edit Distance: " + editDistance + "\nSteps:\n" + steps);
+        outputTextArea.setText("Edit Distance: " + editDistance + "\nSteps:\n" + steps.toString());
     }
 
-    private int[][] computeEditDistance(String word1, String word2) {
-        int m = word1.length();
-        int n = word2.length();
-
-        int[][] dp = new int[m + 1][n + 1];
-
-        // Initialize base cases
-        for (int i = 0; i <= m; i++) {
-            dp[i][0] = i;
+    private int computeEditDistanceWithLogic(String word1, String word2, StringBuilder steps) {
+        int prefixLength = 0;
+        while (prefixLength < word1.length() && prefixLength < word2.length() && word1.charAt(prefixLength) == word2.charAt(prefixLength)) {
+            prefixLength++;
         }
-        for (int j = 0; j <= n; j++) {
-            dp[0][j] = j;
-        }
+        word1 = word1.substring(prefixLength);
+        word2 = word2.substring(prefixLength);
 
-        // Fill DP table
-        for (int i = 1; i <= m; i++) {
-            for (int j = 1; j <= n; j++) {
-                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                    dp[i][j] = dp[i - 1][j - 1]; // No change needed
-                } else {
-                    dp[i][j] = 1 + Math.min(dp[i - 1][j - 1], // Replace
-                            Math.min(dp[i - 1][j], // Remove
-                                    dp[i][j - 1])); // Insert
-                }
-            }
+        while (!word1.isEmpty() && !word2.isEmpty() && word1.charAt(word1.length() - 1) == word2.charAt(word2.length() - 1)) {
+            word1 = word1.substring(0, word1.length() - 1);
+            word2 = word2.substring(0, word2.length() - 1);
         }
 
-        return dp;
+        return computeEditDistanceRecursive(word1, word2, steps, 0);
     }
 
-    private String reconstructSteps(String word1, String word2, int[][] dp) {
-        StringBuilder steps = new StringBuilder();
-
-        int i = word1.length();
-        int j = word2.length();
-
-        while (i > 0 || j > 0) {
-            if (i > 0 && j > 0 && word1.charAt(i - 1) == word2.charAt(j - 1)) {
-                i--;
-                j--;
-            } else if (i > 0 && dp[i][j] == dp[i - 1][j] + 1) {
-                steps.append("Remove '").append(word1.charAt(i - 1)).append("' from position ").append(i).append("\n");
-                i--;
-            } else if (j > 0 && dp[i][j] == dp[i][j - 1] + 1) {
-                steps.append("Insert '").append(word2.charAt(j - 1)).append("' at position ").append(i + 1).append("\n");
-                j--;
-            } else {
-                steps.append("Replace '").append(word1.charAt(i - 1)).append("' with '").append(word2.charAt(j - 1)).append("' at position ").append(i).append("\n");
-                i--;
-                j--;
+    private int computeEditDistanceRecursive(String word1, String word2, StringBuilder steps, int position) {
+        if (word1.isEmpty()) {
+            for (int i = 0; i < word2.length(); i++) {
+                steps.append("Insert '").append(word2.charAt(i)).append("' at position ").append(position + i + 1).append("\n");
             }
+            return word2.length();
         }
 
-        return steps.reverse().toString();
+        if (word2.isEmpty()) {
+            for (int i = 0; i < word1.length(); i++) {
+                steps.append("Remove '").append(word1.charAt(i)).append("' from position ").append(position + 1).append("\n");
+            }
+            return word1.length();
+        }
+
+        if (word1.charAt(0) == word2.charAt(0)) {
+            return computeEditDistanceRecursive(word1.substring(1), word2.substring(1), steps, position + 1);
+        }
+
+        steps.append("Remove '").append(word1.charAt(0)).append("' from position ").append(position + 1).append("\n");
+        steps.append("Insert '").append(word2.charAt(0)).append("' at position ").append(position + 1).append("\n");
+        
+        return computeEditDistanceRecursive(word1.substring(1), word2.substring(1), steps, position + 1) + 2;
     }
 
     private void clearFields() {
@@ -163,10 +144,10 @@ public class EditDistance extends JFrame {
         inputTextArea2.setText("");
         outputTextArea.setText("");
         timeLabel.setText("Time taken: ");
+        inputTextArea1.requestFocus();
     }
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(EditDistance::new);
     }
 }
-

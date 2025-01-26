@@ -129,7 +129,7 @@ public class RandomGroups extends JFrame {
             List<Integer> randomGroup = array.subList(0, groupSize);
             long endTime = System.nanoTime();
 
-            double timeTaken = (endTime - startTime) / 1_000_000.0;
+            double timeTaken = (endTime - startTime) / 1000000.0;
             resultArea.setText(randomGroup.toString());
             timeLabel.setText(String.format("Computation time: %.3f ms", timeTaken));
         } catch (NumberFormatException ex) {

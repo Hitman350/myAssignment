@@ -17,53 +17,67 @@ public class Combinations extends JFrame {
     private JLabel errorLabel;
 
     public Combinations() {
-        // Frame setup
         setTitle("Combinations");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(5, 5));
-        setSize(500, 600); 
+        setSize(600, 700);
+        setLocationRelativeTo(null);
+        setResizable(false);
 
-        // Top panel for inputs
         JPanel topPanel = new JPanel(new GridLayout(2, 2, 5, 5));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        topPanel.add(new JLabel("Items:"));
+        JLabel itemsLabel = new JLabel("Items:");
+        itemsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        topPanel.add(itemsLabel);
+
         itemsField = new JTextField();
+        itemsField.setFont(new Font("Arial", Font.PLAIN, 16));
         topPanel.add(itemsField);
-        topPanel.add(new JLabel("# Per Selection:"));
+
+        JLabel lengthLabel = new JLabel("# Per Selection:");
+        lengthLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        topPanel.add(lengthLabel);
+
         lengthField = new JTextField();
+        lengthField.setFont(new Font("Arial", Font.PLAIN, 16));
         topPanel.add(lengthField);
+
         add(topPanel, BorderLayout.NORTH);
 
-        // Center panel for results
-        resultArea = new JTextArea(10, 30);
+        resultArea = new JTextArea(15, 40);
+        resultArea.setFont(new Font("Arial", Font.PLAIN, 16));
         resultArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(resultArea);
         add(scrollPane, BorderLayout.CENTER);
 
-        // Bottom panel for controls
-        JPanel bottomPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+        JPanel bottomPanel = new JPanel(new GridLayout(5, 1, 5, 5));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        countLabel = new JLabel("# Combinations: 0");
-        timeLabel = new JLabel("Time Taken: 0 ms");
-        errorLabel = new JLabel("");
-        errorLabel.setForeground(Color.RED); // Display error message in red
-
+        countLabel = new JLabel("# Combinations:", SwingConstants.CENTER);
+        countLabel.setFont(new Font("Arial", Font.BOLD, 16));
         bottomPanel.add(countLabel);
+
+        timeLabel = new JLabel("Time Taken:", SwingConstants.CENTER);
+        timeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         bottomPanel.add(timeLabel);
+
+        errorLabel = new JLabel("", SwingConstants.CENTER);
+        errorLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        errorLabel.setForeground(Color.RED);
         bottomPanel.add(errorLabel);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        JButton generateButton = new JButton("Go");
+        JButton generateButton = new JButton("Generate");
+        generateButton.setFont(new Font("Arial", Font.BOLD, 16));
         JButton clearButton = new JButton("Clear");
+        clearButton.setFont(new Font("Arial", Font.BOLD, 16));
         buttonPanel.add(generateButton);
         buttonPanel.add(clearButton);
         bottomPanel.add(buttonPanel);
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Button action listeners
         generateButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -84,17 +98,13 @@ public class Combinations extends JFrame {
         String[] items = itemsInput.split("\\s+");
         String lengthInput = lengthField.getText().trim();
 
-        resultArea.setText(""); // Clear previous results
-        countLabel.setText("# Combinations: 0");
-        timeLabel.setText("Time Taken: 0 ms");
-        errorLabel.setText(""); // Clear previous error messages
+        resultArea.setText("");
+        countLabel.setText("# Combinations:");
+        timeLabel.setText("Time Taken:");
+        errorLabel.setText("");
 
         try {
-            long startTime = System.currentTimeMillis();
-
-            if (lengthInput.isEmpty()) {
-                throw new IllegalArgumentException("Length is required for combinations.");
-            }
+            long startTime = System.nanoTime();
 
             int length = Integer.parseInt(lengthInput);
             if (length <= 0 || length > items.length) {
@@ -103,14 +113,14 @@ public class Combinations extends JFrame {
 
             List<List<String>> combinations = getCombinations(items, length);
 
-            // Display results
             for (List<String> combination : combinations) {
                 resultArea.append(String.join(" ", combination) + "\n");
             }
 
-            long endTime = System.currentTimeMillis();
+            long endTime = System.nanoTime();
+            double timeTaken = (endTime - startTime) / 1000000.0;
             countLabel.setText("# Combinations: " + combinations.size());
-            timeLabel.setText("Time Taken: " + (endTime - startTime) + " ms");
+            timeLabel.setText(String.format("Time Taken: %.3f ms", timeTaken));
         } catch (NumberFormatException ex) {
             errorLabel.setText("Error: Length must be a valid integer.");
         } catch (IllegalArgumentException ex) {
@@ -124,18 +134,19 @@ public class Combinations extends JFrame {
         itemsField.setText("");
         lengthField.setText("");
         resultArea.setText("");
-        countLabel.setText("# Combinations: 0");
-        timeLabel.setText("Time Taken: 0 ms");
+        countLabel.setText("# Combinations: ");
+        timeLabel.setText("Time Taken: ");
         errorLabel.setText("");
+        itemsField.requestFocus();
     }
 
     private List<List<String>> getCombinations(String[] items, int length) {
         List<List<String>> results = new ArrayList<>();
-        generateCombinationsHelper(items, length, 0, new ArrayList<>(), results);
+        generateCombinations(items, length, 0, new ArrayList<>(), results);
         return results;
     }
 
-    private void generateCombinationsHelper(String[] items, int length, int start, List<String> current, List<List<String>> results) {
+    private void generateCombinations(String[] items, int length, int start, List<String> current, List<List<String>> results) {
         if (current.size() == length) {
             results.add(new ArrayList<>(current));
             return;
@@ -143,7 +154,7 @@ public class Combinations extends JFrame {
 
         for (int i = start; i < items.length; i++) {
             current.add(items[i]);
-            generateCombinationsHelper(items, length, i + 1, current, results);
+            generateCombinations(items, length, i + 1, current, results);
             current.remove(current.size() - 1);
         }
     }
@@ -155,4 +166,3 @@ public class Combinations extends JFrame {
         });
     }
 }
-

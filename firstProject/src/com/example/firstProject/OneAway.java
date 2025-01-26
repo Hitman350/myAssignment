@@ -108,14 +108,14 @@ public class OneAway extends JFrame {
         String longer = len1 < len2 ? str2 : str1;
 
         int index1 = 0, index2 = 0;
-        boolean foundDifference = false;
+        boolean difference = false;
 
         while (index1 < shorter.length() && index2 < longer.length()) {
             if (shorter.charAt(index1) != longer.charAt(index2)) {
-                if (foundDifference) {
+                if (difference) {
                     return false;
                 }
-                foundDifference = true;
+                difference = true;
 
                 if (len1 == len2) {
                     index1++;

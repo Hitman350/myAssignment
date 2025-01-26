@@ -8,11 +8,10 @@ public class LongestCommonSubstring extends JFrame {
     private JLabel timeLabel;
 
     public LongestCommonSubstring() {
-        setTitle("Longest Common Substring Finder");
+        setTitle("Longest Common Substring");
         setSize(800, 500);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(10, 10));
-
         setResizable(false);
         setLocationRelativeTo(null);
 
@@ -95,7 +94,7 @@ public class LongestCommonSubstring extends JFrame {
         String longestSubstring = getLongestCommonSubstring(str1, str2);
 
         long endTime = System.nanoTime();
-        timeLabel.setText("Time taken: " + (endTime - startTime) / 1_000_000.0 + " ms");
+        timeLabel.setText("Time taken: " + (endTime - startTime) / 1000000.0 + " ms");
 
         outputTextArea.setText(longestSubstring);
     }

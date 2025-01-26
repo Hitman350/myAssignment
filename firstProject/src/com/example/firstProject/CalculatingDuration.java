@@ -31,7 +31,6 @@ public class CalculatingDuration extends JFrame {
         gbc.gridy = 0;
         gbc.insets = new Insets(10, 10, 10, 10);
 
-        // Start date and time
         startDateChooser = new JDateChooser();
         startDateChooser.setDate(new Date());
         startDateChooser.setPreferredSize(new Dimension(200, 30));
@@ -48,7 +47,6 @@ public class CalculatingDuration extends JFrame {
         gbc.gridx++;
         inputPanel.add(startTimeSpinner, gbc);
 
-        // End date and time
         gbc.gridx = 0;
         gbc.gridy++;
         endDateChooser = new JDateChooser();
@@ -67,7 +65,6 @@ public class CalculatingDuration extends JFrame {
         gbc.gridx++;
         inputPanel.add(endTimeSpinner, gbc);
 
-        // Buttons
         calculateButton = new JButton("Calculate");
         resetButton = new JButton("Clear");
 
@@ -82,7 +79,6 @@ public class CalculatingDuration extends JFrame {
 
         add(inputPanel, BorderLayout.NORTH);
 
-        // Result area
         resultPane = new JTextPane();
         resultPane.setEditable(false);
         resultPane.setFont(new Font("Arial", Font.PLAIN, 16));
@@ -101,7 +97,6 @@ public class CalculatingDuration extends JFrame {
             return;
         }
 
-        // Combine date and time
         Calendar startCal = Calendar.getInstance();
         startCal.setTime(startDate);
         Calendar endCal = Calendar.getInstance();
@@ -124,11 +119,9 @@ public class CalculatingDuration extends JFrame {
 
         long startTime = System.nanoTime();
 
-        // Calculate the time difference in hours
         long differenceMillis = endCal.getTimeInMillis() - startCal.getTimeInMillis();
         long differenceHours = differenceMillis / (1000 * 60 * 60);
 
-        // Convert times to UTC
         TimeZone utc = TimeZone.getTimeZone("UTC");
         SimpleDateFormat utcFormat = new SimpleDateFormat("EEEE, yyyy-MM-dd HH:mm");
         utcFormat.setTimeZone(utc);
@@ -136,7 +129,6 @@ public class CalculatingDuration extends JFrame {
         String startUTC = utcFormat.format(startCal.getTime());
         String endUTC = utcFormat.format(endCal.getTime());
 
-        // Calculate the time difference in UTC
         long utcDifferenceMillis = differenceMillis;
         long utcDifferenceHours = utcDifferenceMillis / (1000 * 60 * 60);
 
@@ -174,6 +166,7 @@ public class CalculatingDuration extends JFrame {
         endDateChooser.setDate(new Date());
         endTimeSpinner.setValue(new Date());
         setNormalText("");
+        startDateChooser.requestFocus();
     }
 
     public static void main(String[] args) {

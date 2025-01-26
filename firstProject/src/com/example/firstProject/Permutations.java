@@ -20,42 +20,58 @@ public class Permutations extends JFrame {
         setTitle("Permutations");
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout(5, 5));
-        setSize(500, 600);
-
+        setSize(600, 700);
         setLocationRelativeTo(null);
         setResizable(false);
 
         JPanel topPanel = new JPanel(new GridLayout(2, 2, 5, 5));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        topPanel.add(new JLabel("Items:"));
+        JLabel itemsLabel = new JLabel("Items:");
+        itemsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        topPanel.add(itemsLabel);
+
         itemsField = new JTextField();
+        itemsField.setFont(new Font("Arial", Font.PLAIN, 16));
         topPanel.add(itemsField);
-        topPanel.add(new JLabel("# Per Selection:"));
+
+        JLabel lengthLabel = new JLabel("# Per Selection:");
+        lengthLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        topPanel.add(lengthLabel);
+
         lengthField = new JTextField();
+        lengthField.setFont(new Font("Arial", Font.PLAIN, 16));
         topPanel.add(lengthField);
+
         add(topPanel, BorderLayout.NORTH);
 
-        resultArea = new JTextArea(10, 30);
+        resultArea = new JTextArea(15, 40);
+        resultArea.setFont(new Font("Arial", Font.PLAIN, 16));
         resultArea.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(resultArea);
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel bottomPanel = new JPanel(new GridLayout(4, 1, 5, 5));
+        JPanel bottomPanel = new JPanel(new GridLayout(5, 1, 5, 5));
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        countLabel = new JLabel("# Permutations: 0");
-        timeLabel = new JLabel("Time Taken: 0 ms");
-        errorLabel = new JLabel("");
-        errorLabel.setForeground(Color.RED);
-
+        countLabel = new JLabel("# Permutations:", SwingConstants.CENTER);
+        countLabel.setFont(new Font("Arial", Font.BOLD, 16));
         bottomPanel.add(countLabel);
+
+        timeLabel = new JLabel("Time Taken:", SwingConstants.CENTER);
+        timeLabel.setFont(new Font("Arial", Font.BOLD, 16));
         bottomPanel.add(timeLabel);
+
+        errorLabel = new JLabel("", SwingConstants.CENTER);
+        errorLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        errorLabel.setForeground(Color.RED);
         bottomPanel.add(errorLabel);
 
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         JButton generateButton = new JButton("Generate");
+        generateButton.setFont(new Font("Arial", Font.BOLD, 16));
         JButton clearButton = new JButton("Clear");
+        clearButton.setFont(new Font("Arial", Font.BOLD, 16));
         buttonPanel.add(generateButton);
         buttonPanel.add(clearButton);
         bottomPanel.add(buttonPanel);
@@ -83,12 +99,12 @@ public class Permutations extends JFrame {
         String lengthInput = lengthField.getText().trim();
 
         resultArea.setText("");
-        countLabel.setText("# Permutations: 0");
-        timeLabel.setText("Time Taken: 0 ms");
+        countLabel.setText("# Permutations:");
+        timeLabel.setText("Time Taken:");
         errorLabel.setText("");
 
         try {
-            long startTime = System.currentTimeMillis();
+            long startTime = System.nanoTime();
 
             List<List<String>> permutations;
             if (lengthInput.isEmpty()) {
@@ -102,9 +118,10 @@ public class Permutations extends JFrame {
                 resultArea.append(String.join(" ", permutation) + "\n");
             }
 
-            long endTime = System.currentTimeMillis();
+            long endTime = System.nanoTime();
+            double timeTaken = (endTime - startTime) / 1_000_000.0;
             countLabel.setText("# Permutations: " + permutations.size());
-            timeLabel.setText("Time Taken: " + (endTime - startTime) + " ms");
+            timeLabel.setText(String.format("Time Taken: %.3f ms", timeTaken));
         } catch (NumberFormatException ex) {
             errorLabel.setText("Error: Length must be a valid integer.");
         } catch (IllegalArgumentException ex) {
@@ -118,9 +135,10 @@ public class Permutations extends JFrame {
         itemsField.setText("");
         lengthField.setText("");
         resultArea.setText("");
-        countLabel.setText("# Permutations: 0");
-        timeLabel.setText("Time Taken: 0 ms");
+        countLabel.setText("# Permutations:");
+        timeLabel.setText("Time Taken: ");
         errorLabel.setText("");
+        itemsField.requestFocus();
     }
 
     private List<List<String>> getAllPermutations(String[] items) {
@@ -136,11 +154,11 @@ public class Permutations extends JFrame {
         if (length > items.length || length <= 0) {
             return results;
         }
-        generatePermutationsHelper(items, length, new ArrayList<>(), results);
+        generatePermutations(items, length, new ArrayList<>(), results);
         return results;
     }
 
-    private void generatePermutationsHelper(String[] items, int length, List<String> current, List<List<String>> results) {
+    private void generatePermutations(String[] items, int length, List<String> current, List<List<String>> results) {
         if (current.size() == length) {
             results.add(new ArrayList<>(current));
             return;
@@ -149,8 +167,8 @@ public class Permutations extends JFrame {
         for (String item : items) {
             if (current.contains(item)) continue;
             current.add(item);
-            generatePermutationsHelper(items, length, current, results);
-            current.remove(current.size() - 1);
+            generatePermutations(items, length, current, results);
+            current.remove(current.size() -1);
         }
     }
 
