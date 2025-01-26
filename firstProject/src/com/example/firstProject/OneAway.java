@@ -92,7 +92,7 @@ public class OneAway extends JFrame {
         boolean result = isOneAway(str1, str2);
 
         long endTime = System.nanoTime();
-        timeLabel.setText("Time taken: " + (endTime - startTime) / 1_000_000.0 + " ms");
+        timeLabel.setText("Time taken: " + (endTime - startTime) / 1000000.0 + " ms");
 
         outputTextArea.setText(result ? "TRUE" : "FALSE");
     }
