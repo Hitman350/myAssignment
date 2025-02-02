@@ -24,7 +24,6 @@ public class AgeCalculator extends JFrame implements ActionListener {
         setResizable(false);
         setLocationRelativeTo(null);
 
-        // Create top panel
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new GridLayout(2, 1));
         topPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -35,7 +34,6 @@ public class AgeCalculator extends JFrame implements ActionListener {
         topPanel.add(promptLabel);
         topPanel.add(dateChooser);
 
-        // Create bottom panel
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -51,10 +49,10 @@ public class AgeCalculator extends JFrame implements ActionListener {
         bottomPanel.add(buttonPanel, BorderLayout.NORTH);
 
         ageLabel = new JLabel("", SwingConstants.CENTER);
-        ageLabel.setFont(new Font("Arial", Font.PLAIN, 16)); // Set font for better visibility
+        ageLabel.setFont(new Font("Arial", Font.PLAIN, 16));
 
         computationTimeLabel = new JLabel("", SwingConstants.CENTER);
-        computationTimeLabel.setFont(new Font("Arial", Font.PLAIN, 14)); // Slightly smaller font for computation time
+        computationTimeLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
         bottomPanel.add(ageLabel, BorderLayout.CENTER);
         bottomPanel.add(computationTimeLabel, BorderLayout.SOUTH);

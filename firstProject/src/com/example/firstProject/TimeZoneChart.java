@@ -98,7 +98,6 @@ public class TimeZoneChart extends JFrame {
 
         comparisonTable.setModel(new javax.swing.table.DefaultTableModel(data, columnNames));
 
-        // Highlight the current local time row
         Calendar localCal = Calendar.getInstance();
         int currentHour = localCal.get(Calendar.HOUR_OF_DAY);
         comparisonTable.setRowSelectionInterval(currentHour, currentHour);
