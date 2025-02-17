@@ -90,7 +90,7 @@ public class EditDistance extends JFrame {
         long startTime = System.nanoTime();
 
         StringBuilder steps = new StringBuilder();
-        int editDistance = computeEditDistanceWithLogic(word1, word2, steps);
+        int editDistance = computeEditDistance(word1, word2, steps);
 
         long endTime = System.nanoTime();
         timeLabel.setText("Time taken: " + (endTime - startTime) / 1000000.0 + " ms");
@@ -98,7 +98,7 @@ public class EditDistance extends JFrame {
         outputTextArea.setText("Edit Distance: " + editDistance + "\nSteps:\n" + steps.toString());
     }
 
-    private int computeEditDistanceWithLogic(String word1, String word2, StringBuilder steps) {
+    private int computeEditDistance(String word1, String word2, StringBuilder steps) {
         int prefixLength = 0;
         while (prefixLength < word1.length() && prefixLength < word2.length() && word1.charAt(prefixLength) == word2.charAt(prefixLength)) {
             prefixLength++;

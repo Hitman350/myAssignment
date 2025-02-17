@@ -119,7 +119,7 @@ public class Permutations extends JFrame {
             }
 
             long endTime = System.nanoTime();
-            double timeTaken = (endTime - startTime) / 1_000_000.0;
+            double timeTaken = (endTime - startTime) / 1000000.0;
             countLabel.setText("# Permutations: " + permutations.size());
             timeLabel.setText(String.format("Time Taken: %.3f ms", timeTaken));
         } catch (NumberFormatException ex) {
